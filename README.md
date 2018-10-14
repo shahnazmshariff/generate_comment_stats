@@ -1,5 +1,9 @@
-# generate_comment_stats
-Generate the total number of lines, comments and the number of single, multi-line and TODO comments. Currently support 8 programming languages (Python, Java, JavaScript, C#, Ruby, C++, C, PHP)
+Generate Comment Stats 
+Input: Source Code 
+Output: The total number of lines, comments and the number of single, multi-line and TODO comments 
+
+Currently support 8 programming languages (Python, Java, JavaScript, C#, Ruby, C++, C, PHP)
+Syntax for comments in popular programming languages:
 
 C#:
 
