@@ -1,39 +1,39 @@
 # generate_comment_stats
 Generate the total number of lines, comments and the number of single, multi-line and TODO comments. Currently support 8 programming languages (Python, Java, JavaScript, C#, Ruby, C++, C, PHP)
 
-c#:
+C#:
 
-single: //
-multi-line: /*  .. */
-xml-doc comments: ///
+	single line: //
+	multi-line: /*  .. */
+	xml-doc comments: ///
 
-java:
+Java:
 
-single: //
-multi-line: /*  .. */
+	single line: //
+	multi-line: /*  .. */
 
-javascript:
+Javascript:
 
-single: //
-multi-line: /*  .. */
+	single line: //
+	multi-line: /*  .. */
 
-c, c++:
+C, C++:
 
-single: //
-multi-line: /*  .. */
+	single line: //
+	multi-line: /*  .. */
 
 
-php:
+PHP:
 
-single: // or #
-multi-line: /* ... */
+	single line: // or #
+	multi-line: /* ... */
 
-ruby:
+Ruby:
 
-single: #
-multi-line: =begin, =end
+	single line: #
+	multi-line: =begin, =end
 
-python:
+Python:
 
-single: #
-multi-line: # followed by #
+	single line: #
+	multi-line: # followed by #
