@@ -7,7 +7,7 @@ def report_java_comments_stats(all_lines):
     # Note: xml doc comments are considered as single line comments in C#
     for line_no, line in enumerate(all_lines):
         line = line.strip()
-        # add another check to make sure that we dont counnt // not present within a string
+        # add another check to make sure that we dont counnt // present within a string
         if '//' in line and '\"' not in line:
             single_line_comments += 1
         if 'TODO' in line:
