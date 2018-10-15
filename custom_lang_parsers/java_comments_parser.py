@@ -7,22 +7,44 @@ def report_java_comments_stats(all_lines):
     # Note: xml doc comments are considered as single line comments in C#
     for line_no, line in enumerate(all_lines):
         line = line.strip()
-        # add another check to make sure that we dont counnt // present within a string
-        if '//' in line and '\"' not in line:
-            single_line_comments += 1
+        # add another check to make sure that we dont count // present within a string
+        # although a comment can have strings with quotes - so check if the string preceding // contains a quote
+        single_line_with_quotes = line.split('//')
+        quotes = ["\'", '\"']
+        if '//' in line and single_line_with_quotes[0] not in quotes:
+            count_single_quotes = 0
+            # in order to distinguish inline comments and strings which have // or #
+            # I count the number of quotes in the line before the start of comment (// or #)
+            # based on the heuristics that inline comments will have more than one quote symbol before the start of the comment
+            for str in single_line_with_quotes[0]:
+                if str == "\'" or str == '\"':
+                    count_single_quotes +=1
+            # print count_single_quotes
+            if len(single_line_with_quotes[0]) > 1 and count_single_quotes >= 1:
+                pass
+            else:
+                single_line_comments += 1
         if 'TODO' in line:
             todos += 1
-        if '/*' in line and '\"' not in line:
+        multi_line_with_quotes_1 = line.split('/*')
+        if '/*' in line and multi_line_with_quotes_1[0] not in quotes:
+            if len(multi_line_with_quotes_1[0]) > 1 and any(quote in quotes for quote in multi_line_with_quotes_1[0]):
+                pass
+            else:
+                # print line
+                block_line_start.append(line_no)
+                if len(line) > 3:
+                    multi_line_comts += 1
+        multi_line_with_quotes_2 = line.split('*/')
+        if '*/' in line and multi_line_with_quotes_2[0] not in quotes:
+            if len(multi_line_with_quotes_2[0]) > 1 and any(quote in quotes for quote in multi_line_with_quotes_2[0]):
+                pass
             # print line
-            block_line_start.append(line_no)
-            if len(line) > 3:
-                multi_line_comts += 1
-        if '*/' in line and '\"' not in line:
-            # print line
-            block_line_end.append(line_no)
-            #to avoid cases where block line comments are empty
-            if len(line) > 3 and line_no not in block_line_start:
-                multi_line_comts += 1
+            else:
+                block_line_end.append(line_no)
+                #to avoid cases where block line comments are empty
+                if len(line) > 3 and line_no not in block_line_start:
+                    multi_line_comts += 1
     # print multi_line_comts, "multi_line_comts"
     # print "start", block_line_start
     # print "end", block_line_end
