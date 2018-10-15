@@ -1,46 +1,48 @@
 '''
 Currently support Java, Python, C#, Ruby, PHP, C++, C, Javascript
-Pass filename as command line parameter
-Note: Please ensure that the file exists in the same directory as this script
+Pass filename (with or without path) as command line parameter
 '''
 
 import sys
+import ntpath
 from custom_lang_parsers import java_comments_parser
 from custom_lang_parsers import python_comments_parser
 from custom_lang_parsers import php_comments_parser
 from custom_lang_parsers import ruby_comments_parser
+
 def open_file(file):
     '''
 
     :param file: Input file
-    :return: file object
+    :return: file object and filename
     '''
-    extension = file.split('.')
+    head, filename = ntpath.split(file)
+    extension = filename.split('.')
     # To omit files with no extensions or files that start with '.' as per requirement
-    if file.startswith('.') or len(extension) == 1:
+    if filename.startswith('.') or len(extension) == 1:
         print "File is invalid"
         return 0
     else:
         try:
             f = open(file, 'r')
-            return f
+            return f, filename
         except IOError:
             print "Recheck filename/path (Error opening file)"
             return 0
 
-def type_of_language(file):
+def type_of_language(filename):
     '''
 
     :param file: Input file
     :return: Programming Language used in the file
     '''
-    file = file.lower()
-    extension = file.split('.')
+    filename = filename.lower()
+    extension = filename.split('.')
     ext_name_map = {'java': 'java', 'py':'python', 'cs':'c#', 'js':'javascript', 'c':'c', 'c++':'c++', 'php': 'php', 'rb': 'ruby'}
     if extension[1] in ext_name_map:
         return ext_name_map[extension[1]]
     else:
-        print "language not supported"
+        print "Language not supported"
         return 'unknown'
 
 
@@ -68,9 +70,10 @@ def file_parser(file, language):
 if __name__ == '__main__':
     # Pass filename as command line arg
     file = sys.argv[1]
-    f = open_file(file)
+    f, filename = open_file(file)
+    print "Generating stats for %s" % filename
     if f!=0:
-        prog_language = type_of_language(file)
+        prog_language = type_of_language(filename)
         if prog_language != 'unknown':
             file_parser(f, prog_language)
     else:
