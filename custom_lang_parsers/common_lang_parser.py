@@ -68,6 +68,7 @@ def report_java_comments_stats(all_lines):
             elif line.startswith('//'):
                 pass
             else:
+                # print line
                 block_line_end.append(line_no)
                 #to avoid cases where block line comments are empty
                 if len(line) > 3 and line_no not in block_line_start:
@@ -84,6 +85,7 @@ def report_java_comments_stats(all_lines):
     single_line_comment_in_multi_line_block = [i for i in single_line_comments_line_nos if i in result]
     for i, j in start_end:
         multi_line_comts += (j - i)
+    # print multi_line_comts
     multi_line_comts -= len(block_line_end)
     all_comments = single_line_comments + multi_line_comts - len(single_line_comment_in_multi_line_block)
 

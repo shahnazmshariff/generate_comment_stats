@@ -98,6 +98,8 @@ def report_php_comments_stats(all_lines):
         if '/*' in line and multi_line_with_quotes_1[0] not in quotes:
             if len(multi_line_with_quotes_1[0]) > 1 and any(quote in quotes for quote in multi_line_with_quotes_1[0]):
                 pass
+            elif line.startswith('//'):
+                pass
             else:
                 # print line
                 block_line_start.append(line_no)
@@ -108,6 +110,8 @@ def report_php_comments_stats(all_lines):
             if len(multi_line_with_quotes_2[0]) > 1 and any(quote in quotes for quote in multi_line_with_quotes_2[0]):
                 pass
             # print line
+            elif line.startswith('//'):
+                pass
             else:
                 block_line_end.append(line_no)
                 # to avoid cases where block line comments are empty
@@ -122,6 +126,8 @@ def report_php_comments_stats(all_lines):
         result += range(x,y+1)
     # check if any single line comment appears in the multi line comment block
     single_line_comment_in_multi_line_block = [i for i in single_line_comments_line_nos if i in result]
+    # print single_line_comment_in_multi_line_block
+
     for i, j in start_end:
         multi_line_comts += (j - i)
     multi_line_comts -= len(block_line_end)
