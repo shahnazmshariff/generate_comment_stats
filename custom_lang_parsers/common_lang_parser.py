@@ -1,3 +1,4 @@
+import re
 def report_java_comments_stats(all_lines):
     single_line_comments = 0
     block_line_start = []
@@ -10,32 +11,38 @@ def report_java_comments_stats(all_lines):
     for line_no, line in enumerate(all_lines):
         line = line.strip()
         # add another check to make sure that we dont count // present within a string
-        # although a comment can have strings with quotes - so check if the string preceding // contains a quote
-        single_line_with_quotes = line.split('//')
-        # if '//' in line:
-        #     print single_line_with_quotes[-2]
-        # print single_line_with_quotes
         quotes = ["\'", '\"']
-        # for i in range(len(single_line_with_quotes)):
-        #     print single_line_with_quotes[i]
-        if '//' in line and single_line_with_quotes[0] not in quotes:
-            # print single_line_with_quotes[-1]
-            no_of_lines += 1
-            count_single_quotes = 0
-            # in order to distinguish inline comments and strings which have // or #
-            # I count the number of quotes in the line before the start of comment (// or #)
-            # based on the heuristics that inline comments will have more than one quote symbol before the start of the comment
-            for str in single_line_with_quotes[0]:
-                if str == "\'" or str == '\"':
-                    count_single_quotes += 1
-            print count_single_quotes
-            if count_single_quotes > 1:
-                # print single_line_with_quotes[0]
+        if line.startswith('//'):
+            single_line_comments +=1
+        elif '//' in line:
+            # get all strings with quotes
+            list_with_double_quotes_in_line = re.findall('"([^"]*)"', line)
+            list_with_single_quotes_in_line = re.findall("'([^']*)'", line)
+
+            list_with_quotes_in_line = list_with_double_quotes_in_line + list_with_single_quotes_in_line
+
+            # no quotes in line
+            # print list_with_quotes_in_line
+            if len(list_with_quotes_in_line) == 0:
                 # print line
-                pass
-            else:
-                print line
                 single_line_comments += 1
+            else:
+                for str in list_with_quotes_in_line:
+                    # ignore if // present within a quote
+                    # print str
+                    if '//' not in str and len(list_with_quotes_in_line) == 1:
+                        # print line
+                        single_line_comments += 1
+                    if '//' not in str:
+                        # print line
+                        pass
+                    else:
+                        count_of_slash_within_quotes = str.count('//')
+                        count_of_comment_syntax = line.count('//')
+                        # case where both comment and // within quotes exists
+                        if count_of_comment_syntax - count_of_slash_within_quotes > 0:
+                            # print line
+                            single_line_comments += 1
         if 'TODO' in line:
             todos += 1
         multi_line_with_quotes_1 = line.split('/*')

@@ -1,1 +1,1 @@
-__all__ = ['java_comments_parser', 'python_comments_parser', 'php_comments_parser', 'ruby_comments_parser']
+__all__ = ['java_comments_parser', 'python_comments_parser', 'php_comments_parser', 'ruby_comments_parser', 'common_lang_parser']

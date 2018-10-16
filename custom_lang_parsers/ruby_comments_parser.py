@@ -10,21 +10,37 @@ def report_ruby_comments_stats(all_lines):
         single_line_with_quotes = line.split('#')
         # single and double quotes
         quotes = ["\'", '\"']
-        if '#' in line and single_line_with_quotes[0] not in quotes:
-            count_single_quotes = 0
-            for str in single_line_with_quotes[0]:
-                if str == "\'" or str == '\"':
-                    count_single_quotes += 1
-            # print count_single_quotes
-            if len(single_line_with_quotes[0]) > 1 and count_single_quotes >= 1:
-                pass
-            else:
+        if line.startswith('#'):
+            single_line_comments += 1
+        elif '#' in line:
+            # get all strings with quotes
+            list_with_double_quotes_in_line = re.findall('"([^"]*)"', line)
+            list_with_single_quotes_in_line = re.findall("'([^']*)'", line)
+
+            list_with_quotes_in_line = list_with_double_quotes_in_line + list_with_single_quotes_in_line
+
+            # no quotes in line
+            # print list_with_quotes_in_line
+            if len(list_with_quotes_in_line) == 0:
+                # print line
                 single_line_comments += 1
-                # single_line_comments.append(line)
-                possible_inline_comments = line.strip().split('#')
-                # all comments with some text before '#' considered as inline comment
-                if len(possible_inline_comments[0]) > 0:
-                    inline_comments.append(line_no)
+            else:
+                for str in list_with_quotes_in_line:
+                    # ignore if // present within a quote
+                    # print str
+                    if '#' not in str and len(list_with_quotes_in_line) == 1:
+                        # print line
+                        single_line_comments += 1
+                    if '#' not in str:
+                        # print line
+                        pass
+                    else:
+                        count_of_slash_within_quotes = str.count('#')
+                        count_of_comment_syntax = line.count('#')
+                        # case where both comment and // within quotes exists
+                        if count_of_comment_syntax - count_of_slash_within_quotes > 0:
+                            # print line
+                            single_line_comments += 1
         if line.startswith('=begin'):
             block_line_start.append(line_no)
         if line.startswith('=end'):

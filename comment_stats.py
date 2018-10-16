@@ -9,6 +9,7 @@ from custom_lang_parsers import java_comments_parser
 from custom_lang_parsers import python_comments_parser
 from custom_lang_parsers import php_comments_parser
 from custom_lang_parsers import ruby_comments_parser
+from custom_lang_parsers import common_lang_parser
 
 def open_file(file):
     '''
@@ -58,7 +59,7 @@ def file_parser(file, language):
     all_lines = file.readlines()
     print "Total number of lines:", len(all_lines)
     if language == 'java' or language == 'c#' or language == 'javascript' or language=='c' or language=='c++':
-       java_comments_parser.report_java_comments_stats(all_lines)
+       common_lang_parser.report_java_comments_stats(all_lines)
     elif language == 'python':
        python_comments_parser.report_python_comments_stats(all_lines)
     elif language == 'php':
