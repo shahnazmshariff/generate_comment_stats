@@ -13,7 +13,6 @@ from custom_lang_parsers import common_lang_parser
 
 def open_file(file):
     '''
-
     :param file: Input file
     :return: file object and filename
     '''
@@ -39,7 +38,7 @@ def type_of_language(filename):
     '''
     filename = filename.lower()
     extension = filename.split('.')
-    ext_name_map = {'java': 'java', 'py':'python', 'cs':'c#', 'js':'javascript', 'c':'c', 'c++':'c++', 'php': 'php', 'rb': 'ruby'}
+    ext_name_map = {'java': 'java', 'py':'python', 'cs':'c#', 'js':'javascript', 'c':'c', 'cc':'c++', 'cpp':'c++', 'php': 'php', 'rb': 'ruby'}
     if extension[1] in ext_name_map:
         return ext_name_map[extension[1]]
     else:

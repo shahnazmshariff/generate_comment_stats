@@ -45,8 +45,13 @@ def report_python_comments_stats(all_lines):
         #single and double quotes
         quotes = ["\'", '\"']
         if line.startswith('#'):
+            # print line
             all_comments +=1
         elif '#' in line:
+            possible_inline_comments = line.strip().split('#')
+            # all comments with some text before '#' considered as inline comment
+            if len(possible_inline_comments[0]) > 0:
+                inline_comments.append(line_no)
             # get all strings with quotes
             list_with_double_quotes_in_line = re.findall('"([^"]*)"', line)
             list_with_single_quotes_in_line = re.findall("'([^']*)'", line)
@@ -56,14 +61,14 @@ def report_python_comments_stats(all_lines):
             # no quotes in line
             # print list_with_quotes_in_line
             if len(list_with_quotes_in_line) == 0:
-                print line
+                # print line
                 all_comments += 1
             else:
                 for str in list_with_quotes_in_line:
                     # ignore if // present within a quote
                     # print str
                     if '#' not in str and len(list_with_quotes_in_line) == 1:
-                        print line
+                        # print line
                         all_comments += 1
                     if '#' not in str:
                         # print line
@@ -73,7 +78,7 @@ def report_python_comments_stats(all_lines):
                         count_of_comment_syntax = line.count('#')
                         # case where both comment and // within quotes exists
                         if count_of_comment_syntax - count_of_slash_within_quotes > 0:
-                            print line
+                            # print line
                             all_comments += 1
         # if '#' in line and single_line_with_quotes[0] not in quotes:
         #     if len(single_line_with_quotes[0]) > 1 and any(quote in quotes for quote in single_line_with_quotes[0]):
@@ -82,10 +87,6 @@ def report_python_comments_stats(all_lines):
         #         # print line
         #         all_comments += 1
         #         all_comments_list.append(line)
-        #         possible_inline_comments = line.strip().split('#')
-        #         # all comments with some text before '#' considered as inline comment
-        #         if len(possible_inline_comments[0]) > 0:
-        #             inline_comments.append(line_no)
         # check if the previous or next line has '#' and also make sure the prev or current line is not an inline comment
         if '#' in line and single_line_with_quotes[0] not in quotes and ('#' in all_lines[line_no - 1] or '#' in all_lines[line_no + 1]) and \
                                 line_no - 1 not in inline_comments and line_no not in inline_comments and (all_lines[line_no - 1].split('#')[0] not in quotes or all_lines[line_no + 1].split('#')[0] not in quotes):
