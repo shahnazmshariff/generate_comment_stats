@@ -5,7 +5,6 @@ Pass filename (with or without path) as command line parameter
 
 import sys
 import ntpath
-from custom_lang_parsers import java_comments_parser
 from custom_lang_parsers import python_comments_parser
 from custom_lang_parsers import php_comments_parser
 from custom_lang_parsers import ruby_comments_parser
