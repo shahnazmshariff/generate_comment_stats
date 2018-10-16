@@ -53,3 +53,25 @@ Python:
 
 	single line: #
 	multi-line: # followed by #
+
+Note
+
+	In java, c#, javascript, C, C++
+
+		1. /*comment 1*/ will be account as a block line comment but the number of lines within the block will be 0 (as the block starts and closes in the same line)
+
+		2. /* comment 1 starting on line 1
+      		   *
+      		   *
+     		   */
+
+	Total # of comment lines within block comment will be 4 as the comment starts on the first line
+
+	In Python
+
+		1. print "Hello world!" # printing hello world ---- (1)
+     	           # comment explaining the next line          ---- (2)
+
+	In this case, (1) will be considered as an inline comment and (2) as a single line comment. ie. (1) and (2) together will not be considered as a multi-line   block
+
+		2. '#' within docstring comments will be considered as a comment  
