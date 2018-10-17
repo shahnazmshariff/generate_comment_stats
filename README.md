@@ -65,7 +65,7 @@ Note
       		   *
      		   */
 
-	'Total # of comment lines within block comment' will be 4 as the comment starts on the first line
+	'Total # of comment lines within block comment' will be 3 as the comment starts on the first line
 
 	In Python
 
