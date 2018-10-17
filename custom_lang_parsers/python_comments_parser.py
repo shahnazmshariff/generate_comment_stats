@@ -25,7 +25,6 @@ def get_sequences_from_list(multi_line_comment_lines):
     for sublist in result:
         partial_sum = sublist[-1] - sublist[0] + 1
         multi_line_comments += partial_sum
-    # print result
     return len(result), multi_line_comments
 
 
@@ -45,8 +44,8 @@ def report_python_comments_stats(all_lines):
         #single and double quotes
         quotes = ["\'", '\"']
         if line.startswith('#'):
-            # print line
             all_comments +=1
+            all_comments_list.append(line_no)
         elif '#' in line:
             possible_inline_comments = line.strip().split('#')
             # all comments with some text before '#' considered as inline comment
@@ -59,51 +58,36 @@ def report_python_comments_stats(all_lines):
             list_with_quotes_in_line = list_with_double_quotes_in_line + list_with_single_quotes_in_line
 
             # no quotes in line
-            # print list_with_quotes_in_line
             if len(list_with_quotes_in_line) == 0:
-                # print line
                 all_comments += 1
+                all_comments_list.append(line_no)
             else:
                 for str in list_with_quotes_in_line:
-                    # ignore if // present within a quote
-                    # print str
-                    if '#' not in str and len(list_with_quotes_in_line) == 1:
-                        # print line
-                        all_comments += 1
-                    if '#' not in str:
-                        # print line
-                        pass
-                    else:
-                        count_of_slash_within_quotes = str.count('#')
-                        count_of_comment_syntax = line.count('#')
-                        # case where both comment and // within quotes exists
-                        if count_of_comment_syntax - count_of_slash_within_quotes > 0:
-                            # print line
+                    # ignore if # present within a quote
+                    if (len(str)) > 0:
+                        if '#' not in str and len(list_with_quotes_in_line) == 1:
                             all_comments += 1
-        # if '#' in line and single_line_with_quotes[0] not in quotes:
-        #     if len(single_line_with_quotes[0]) > 1 and any(quote in quotes for quote in single_line_with_quotes[0]):
-        #         pass
-        #     else:
-        #         # print line
-        #         all_comments += 1
-        #         all_comments_list.append(line)
+                            all_comments_list.append(line_no)
+                        elif '#' not in str and len(list_with_quotes_in_line) > 1:
+                            list_with_quotes_in_line = list_with_quotes_in_line[1:]
+                            pass
+                        else:
+                            count_of_slash_within_quotes = str.count('#')
+                            count_of_comment_syntax = line.count('#')
+                            # case where both comment and // within quotes exists
+                            if count_of_comment_syntax - count_of_slash_within_quotes > 0:
+                                all_comments += 1
+                                all_comments_list.append(line_no)
         # check if the previous or next line has '#' and also make sure the prev or current line is not an inline comment
         if '#' in line and single_line_with_quotes[0] not in quotes and ('#' in all_lines[line_no - 1] or '#' in all_lines[line_no + 1]) and \
                                 line_no - 1 not in inline_comments and line_no not in inline_comments and (all_lines[line_no - 1].split('#')[0] not in quotes or all_lines[line_no + 1].split('#')[0] not in quotes):
             if len(single_line_with_quotes[0]) > 1 and any(quote in quotes for quote in single_line_with_quotes[0]):
                 pass
             else:
-                # print line
                 multi_line_comments_lines.append(line_no)
-                    # print line
-            # multi_line_comments += 1
-        # check if previous and next line is not a comment
-        # if '#' in line and single_line_with_quotes[0] not in quotes and (all_lines[line_no - 1].split('#')[0] not in quotes and all_lines[line_no + 1].split('#')[0] not in quotes):
-        #     single_line_comments += 1
-        #     print line
         if 'TODO' in line:
             todos += 1
-            # obtain length of sequences from muli-line comment lines to get the total # of block line comments
+    # obtain length of sequences from muli-line comment lines to get the total # of block line comments
     block_line_comments, multi_line_comments = get_sequences_from_list(multi_line_comments_lines)
     print "Total number of comment lines:", all_comments
     print "Total number of single line comments:", all_comments - multi_line_comments
